@@ -8,10 +8,10 @@
 #define CLOCK_PIN 13
 #define time_delay 30
 int ball_pos = int(NUM_LEDS / 2);
-int ball_dir = 2;
-int player1_bat = start_index;
+int ball_dir = 1;
+int player1_bat = 0;
 int player1_bat_dir = 1;
-int player2_bat = end_index;
+int player2_bat = 0;
 int player2_bat_dir = -1;
 int bat_max = 5;
 
@@ -41,10 +41,14 @@ void updateBat(int player) {
     player2_bat += player2_bat_dir;
   }
 }
-void drawBat(int r,int g ,int b,int startIndex,int bat_length, int dir) {
-  for (int i = startIndex; (startIndex+(dir*bat_length))-i < 1; i += dir)
+void drawBat(int r,int g ,int b) {
+  for (int i = start_index; i < player1_bat; i ++)
   {
-    updateLedColor(i, r, g, b);
+    updateLedColor(i, 0*r, 127*g, 0*b);
+  }
+  for (int i = end_index; i > end_index-player2_bat; i--)
+  {
+    updateLedColor(i, 0*r, 0*g, 127*b);
   }
 }
 void updateLedColor(int pos, int r, int g, int b) {
@@ -54,19 +58,8 @@ void updateLedColor(int pos, int r, int g, int b) {
     leds[pos].b = b;
   }
 }
-void loop()
+void updateBall()
 {
-  drawBat(0,0,0,start_index,player1_bat,1);
-  drawBat(0,0,0,end_index-1,player2_bat,-1);
-  updateBat(1);
-  updateBat(2);
-  drawBat(0,0,127,start_index,player1_bat,1);
-  drawBat(0,127,0,end_index-1,player2_bat,-1);
-  
-  for (int i = 0; i < 5 ; i++)
-  {
-    updateLedColor(ball_pos - i * ball_dir, 0, 0, 0);
-  }
   // turn off the ball & the trail
   for (int i = 0; i < 5 ; i++)
   {
@@ -83,4 +76,39 @@ void loop()
   }
   FastLED.show();
   delay(time_delay);
+}
+void loop()
+{
+  updateBall();
+  /*drawBat(0,0,0);
+  updateBat(1);
+  updateBat(2);
+  drawBat(1,1,1);
+  */
+}
+void SFXattacking(){
+    int freq = map(sin(millis()/2.0)*1000.0, -1000, 1000, 500, 600);
+    if(random8(5)== 0){
+      freq *= 3;
+    }
+    toneAC(freq, MAX_VOLUME);
+}
+void SFXdead(){
+    int freq = max(1000 - (millis()-killTime), 10);
+    freq += random8(200);
+    int vol = max(10 - (millis()-killTime)/200, 0);
+    toneAC(freq, MAX_VOLUME);
+}
+void SFXkill(){
+    toneAC(2000, MAX_VOLUME, 1000, true);
+}
+void SFXwin(){
+    int freq = (millis()-stageStartTime)/3.0;
+    freq += map(sin(millis()/20.0)*1000.0, -1000, 1000, 0, 20);
+    int vol = 10;//max(10 - (millis()-stageStartTime)/200, 0);
+    toneAC(freq, MAX_VOLUME);
+}
+
+void SFXcomplete(){
+    noToneAC();
 }
