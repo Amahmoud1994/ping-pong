@@ -1,4 +1,5 @@
 #include "FastLED.h"
+#include "Particle.h"
 
 // How many leds in your strip?
 #define NUM_LEDS 29
@@ -12,9 +13,13 @@ int ball_dir = 1;
 int player1_bat = 0;
 int player1_bat_dir = 1;
 int player2_bat = 0;
-int player2_bat_dir = -1;
+int player2_bat_dir = 1;
 int bat_max = 5;
 
+int const particleCount = 40;
+Particle particlePool[40] = {
+  Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle(), Particle()
+};
 // Define the array of leds
 CRGB leds[NUM_LEDS];
 
@@ -26,29 +31,33 @@ bool inBounds(int x) {
   return x >= start_index && x < end_index;
 }
 void updateBat(int player) {
-  if(player == 1)
+  if (player == 1)
   {
     //will check for which player later
-    if(player1_bat + player1_bat_dir > bat_max || player1_bat + player1_bat_dir < 0)
-     player1_bat_dir *= -1;
-    player1_bat += player1_bat_dir;   
+    if (player1_bat + player1_bat_dir > bat_max)
+      player1_bat_dir = -1;
+    else if (player1_bat + player1_bat_dir < 0)
+      player1_bat_dir *= 0;
+    player1_bat += player1_bat_dir;
   }
   else
   {
     //will check for which player later
-    if(player2_bat + player2_bat_dir > bat_max || player2_bat + player2_bat_dir < 0)
-     player2_bat_dir *= -1;
+    if (player2_bat + player2_bat_dir > bat_max)
+      player2_bat_dir = -1;
+    else if (player2_bat + player2_bat_dir < 0)
+      player2_bat_dir = 0;
     player2_bat += player2_bat_dir;
   }
 }
-void drawBat(int r,int g ,int b) {
+void drawBat(int r, int g , int b) {
   for (int i = start_index; i < player1_bat; i ++)
   {
-    updateLedColor(i, 0*r, 127*g, 0*b);
+    updateLedColor(i, 0 * r, 127 * g, 0 * b);
   }
-  for (int i = end_index; i > end_index-player2_bat; i--)
+  for (int i = end_index; i > end_index - player2_bat; i--)
   {
-    updateLedColor(i, 0*r, 0*g, 127*b);
+    updateLedColor(i, 0 * r, 0 * g, 127 * b);
   }
 }
 void updateLedColor(int pos, int r, int g, int b) {
@@ -80,35 +89,25 @@ void updateBall()
 void loop()
 {
   updateBall();
-  /*drawBat(0,0,0);
+  drawBat(0, 0, 0);
   updateBat(1);
   updateBat(2);
-  drawBat(1,1,1);
-  */
+  drawBat(1, 1, 1);
 }
-void SFXattacking(){
-    int freq = map(sin(millis()/2.0)*1000.0, -1000, 1000, 500, 600);
-    if(random8(5)== 0){
-      freq *= 3;
-    }
-    toneAC(freq, MAX_VOLUME);
-}
-void SFXdead(){
-    int freq = max(1000 - (millis()-killTime), 10);
-    freq += random8(200);
-    int vol = max(10 - (millis()-killTime)/200, 0);
-    toneAC(freq, MAX_VOLUME);
-}
-void SFXkill(){
-    toneAC(2000, MAX_VOLUME, 1000, true);
-}
-void SFXwin(){
-    int freq = (millis()-stageStartTime)/3.0;
-    freq += map(sin(millis()/20.0)*1000.0, -1000, 1000, 0, 20);
-    int vol = 10;//max(10 - (millis()-stageStartTime)/200, 0);
-    toneAC(freq, MAX_VOLUME);
+int getLED(int pos) {
+  // The world is 1000 pixels wide, this converts world units into an LED number
+  return constrain((int)map(pos, 0, 1000, 0, NUM_LEDS - 1), 0, NUM_LEDS - 1);
 }
 
-void SFXcomplete(){
-    noToneAC();
+bool tickParticles() {
+  bool stillActive = false;
+  for (int p = 0; p < particleCount; p++) {
+    if (particlePool[p].Alive()) {
+      particlePool[p].Tick(0);
+      leds[getLED(particlePool[p]._pos)] += CRGB(particlePool[p]._power, 0, 0);
+      stillActive = true;
+    }
+  }
+  return stillActive;
 }
+
