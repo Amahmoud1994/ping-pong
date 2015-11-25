@@ -1,5 +1,6 @@
 #include "FastLED.h"
 #include "Particle.h"
+#include "button-read.h"
 
 // How many leds in your strip?
 #define NUM_LEDS 29
@@ -26,6 +27,7 @@ CRGB leds[NUM_LEDS];
 void setup()
 {
   FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
+  setupReading();
 }
 bool inBounds(int x) {
   return x >= start_index && x < end_index;
@@ -37,12 +39,11 @@ void updateBat(int player) {
     if (player1_bat + player1_bat_dir > bat_max)
       player1_bat_dir = -1;
     else if (player1_bat + player1_bat_dir < 0)
-      player1_bat_dir *= 0;
+      player1_bat_dir = 0;
     player1_bat += player1_bat_dir;
   }
   else
   {
-    //will check for which player later
     if (player2_bat + player2_bat_dir > bat_max)
       player2_bat_dir = -1;
     else if (player2_bat + player2_bat_dir < 0)
@@ -90,6 +91,10 @@ void loop()
 {
   updateBall();
   drawBat(0, 0, 0);
+  if(checkBtn1()&& player1_bat_dir == 0)
+  player1_bat_dir = 1;
+  if(checkBtn2()&& player2_bat_dir == 0)
+  player2_bat_dir = 1;
   updateBat(1);
   updateBat(2);
   drawBat(1, 1, 1);
