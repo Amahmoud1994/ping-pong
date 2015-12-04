@@ -1,6 +1,5 @@
 #include "FastLED.h"
 #include "ps3usb-read.h"
-#include "utils.h"
 
 // How many leds in your strip?
 #define NUM_LEDS 270
@@ -11,7 +10,7 @@
 
 int ballPosition = int(NUM_LEDS / 2);
 int ballVelocity = 2;
-int tailLength = 9
+int tailLength = 9;
 
 int player1Bat = 0;
 int player1BatVelocity = 0;
@@ -108,4 +107,8 @@ void loop()
   updateBats();
 
   drawBats(1, 1, 1);
+}
+
+bool inBounds(int position) {
+  return position >= START_INDEX && position < END_INDEX;
 }
