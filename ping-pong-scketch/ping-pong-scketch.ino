@@ -110,6 +110,7 @@ void resetBallPosition()
   Serial.print(player2Score);
   ballPosition = int(NUM_LEDS / 2);
   ballVelocity = 2;
+  ballVelocity *= (random(2) == 1 ? -1:1);
   clearLeds(START_INDEX,END_INDEX);
   FastLED.show();
   delay(1000);
@@ -152,3 +153,4 @@ void loop()
 bool inBounds(int position) {
   return position >= START_INDEX && position < END_INDEX;
 }
+
