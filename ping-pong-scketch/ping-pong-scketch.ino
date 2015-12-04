@@ -101,14 +101,15 @@ void updateBall()
 
 void resetBallPosition()
 {
-  clearLeds(START_INDEX,END_INDEX);
-  delay(1000);
   Serial.print("\n player 1 score : ");
   Serial.print(player1Score);
   Serial.print("\n player 2 score : ");
   Serial.print(player2Score);
   ballPosition = int(NUM_LEDS / 2);
   ballVelocity = 2;
+  clearLeds(START_INDEX,END_INDEX);
+  FastLED.show();
+  delay(1000);
 }
 
 void clearLeds(int start,int end) {
@@ -141,4 +142,8 @@ void loop()
   updateBats();
 
   drawBats(1, 1, 1);
+}
+
+bool inBounds(int position) {
+  return position >= START_INDEX && position < END_INDEX;
 }
