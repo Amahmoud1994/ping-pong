@@ -75,8 +75,11 @@ void updateBall()
   {
     updateLedColor(ballPosition - i * ballVelocity, 0, 0, 0);
   }
-  if((player1Bat != 0 && ballPosition + ballVelocity < START_INDEX + player1Bat) ||
-      (player2Bat != 0 && ballPosition + ballVelocity > END_INDEX - player2Bat)) {
+  if((player1Bat != 0 && ballPosition + ballVelocity < START_INDEX + player1Bat)) {
+    clearLeds(START_INDEX,player1Bat);
+    ballVelocity *= -1;
+  }else if(player2Bat != 0 && ballPosition + ballVelocity > END_INDEX - player2Bat){
+    clearLeds(player2Bat,END_INDEX);
     ballVelocity *= -1;
   }
   else if (ballPosition + ballVelocity < START_INDEX){
@@ -95,7 +98,7 @@ void updateBall()
   {
     updateLedColor(ballPosition - i * ballVelocity, (int)(255 * (1.0 / (1 + (i * i)))), 0, 0);
   }
-  FastLED.show();
+
   delay(TIME_DELAY);
 }
 
@@ -142,6 +145,8 @@ void loop()
   updateBats();
 
   drawBats(1, 1, 1);
+
+  FastLED.show();
 }
 
 bool inBounds(int position) {
