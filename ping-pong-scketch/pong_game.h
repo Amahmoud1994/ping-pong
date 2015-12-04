@@ -104,7 +104,7 @@ void updateBall()
 
 void pongGameSetup()
 {
-
+  
 }
 
 void pongGameLoop()
