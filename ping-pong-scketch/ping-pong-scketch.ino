@@ -1,21 +1,23 @@
 #include "FastLED.h"
 #include "Particle.h"
 #include "button-read.h"
+#include "ps3usb-read.h"
 
 // How many leds in your strip?
-#define NUM_LEDS 29
+#define NUM_LEDS 270
 #define start_index 0
 #define end_index NUM_LEDS
 #define DATA_PIN 3
 #define CLOCK_PIN 13
-#define time_delay 30
+#define time_delay 10
+#define tailLength 9
 int ball_pos = int(NUM_LEDS / 2);
-int ball_dir = 1;
+int ball_dir = 2;
 int player1_bat = 0;
 int player1_bat_dir = 1;
 int player2_bat = 0;
 int player2_bat_dir = 1;
-int bat_max = 5;
+int bat_max = 10;
 
 int const particleCount = 40;
 Particle particlePool[40] = {
@@ -27,7 +29,8 @@ CRGB leds[NUM_LEDS];
 void setup()
 {
   FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
-  setupReading();
+//  setupReading();
+    ps3Setup();
 }
 bool inBounds(int x) {
   return x >= start_index && x < end_index;
@@ -71,18 +74,16 @@ void updateLedColor(int pos, int r, int g, int b) {
 void updateBall()
 {
   // turn off the ball & the trail
-  for (int i = 0; i < 5 ; i++)
+  for (int i = 0; i < tailLength ; i++)
   {
     updateLedColor(ball_pos - i * ball_dir, 0, 0, 0);
   }
-  FastLED.show();
-  delay(time_delay);
   if (!inBounds(ball_pos + ball_dir))
     ball_dir *= -1;
   ball_pos += ball_dir;
-  for (int i = 0; i < 5 ; i++)
+  for (int i = 0; i < tailLength ; i++)
   {
-    updateLedColor(ball_pos - i * ball_dir, (int)(127 * (1.0 / (1 + (i * i)))), 0, 0);
+    updateLedColor(ball_pos - i * ball_dir, (int)(255 * (1.0 / (1 + (i * i)))), 0, 0);
   }
   FastLED.show();
   delay(time_delay);
@@ -91,10 +92,20 @@ void loop()
 {
   updateBall();
   drawBat(0, 0, 0);
-  if(checkBtn1()&& player1_bat_dir == 0)
-  player1_bat_dir = 1;
-  if(checkBtn2()&& player2_bat_dir == 0)
-  player2_bat_dir = 1;
+  Usb.Task();
+  if (PS3.getButtonClick(LEFT)) {
+      Serial.print(F("\r\nup"));
+      player1_bat_dir = 1;  
+    }
+  if (PS3.getButtonClick(RIGHT)) {
+      Serial.print(F("\r\nleft"));
+      player2_bat_dir = 1;  
+    }
+    
+//  if(checkBtn1()&& player1_bat_dir == 0)
+//  
+//  if(checkBtn2()&& player2_bat_dir == 0)
+//  player2_bat_dir = 1;
   updateBat(1);
   updateBat(2);
   drawBat(1, 1, 1);
