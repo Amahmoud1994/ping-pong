@@ -1,11 +1,13 @@
 #include "FastLED.h"
 #include "ps3usb-read.h"
+#include "Strip.h"
 
 // How many leds in your strip?
 #define NUM_LEDS 270
 #define START_INDEX 0
 #define END_INDEX NUM_LEDS
-#define DATA_PIN 3
+#define STRIP_1_PIN 3
+#define STRIP_2_PIN 4
 #define TIME_DELAY 10
 
 
@@ -24,7 +26,10 @@ int player2Score = 0;
 int batMaxLength = 10;
 
 // Define the array of leds
-CRGB leds[NUM_LEDS];
+CRGB leds1[270];
+CRGB leds2[30];
+Strip strip1(0,270, leds1);
+Strip strip2(0,30, leds2);
 
 void updateBats() {
 
@@ -50,30 +55,24 @@ void drawBats(int r, int g , int b) {
 
   for (int i = START_INDEX; i < player1Bat; i++)
   {
-    updateLedColor(i, 0 * r, 127 * g, 0 * b);
+    strip1.updateLedColor(i, 0 * r, 127 * g, 0 * b);
   }
 
   for (int i = END_INDEX; i > END_INDEX - player2Bat; i--)
   {
-    updateLedColor(i, 0 * r, 0 * g, 127 * b);
+    strip1.updateLedColor(i, 0 * r, 0 * g, 127 * b);
   }
 
 }
 
-void updateLedColor(int pos, int r, int g, int b) {
-  if (inBounds(pos)) {
-    leds[pos].r = r;
-    leds[pos].g = g;
-    leds[pos].b = b;
-  }
-}
+
 
 void updateBall()
 {
   // turn off the ball & the trail
   for (int i = 0; i < tailLength ; i++)
   {
-    updateLedColor(ballPosition - i * ballVelocity, 0, 0, 0);
+    strip1.updateLedColor(ballPosition - i * ballVelocity, 0, 0, 0);
   }
   if((player1Bat != 0 && ballPosition + ballVelocity < START_INDEX + player1Bat) ||
       (player2Bat != 0 && ballPosition + ballVelocity > END_INDEX - player2Bat)) {
@@ -93,7 +92,7 @@ void updateBall()
 
   for (int i = 0; i < tailLength ; i++)
   {
-    updateLedColor(ballPosition - i * ballVelocity, (int)(255 * (1.0 / (1 + (i * i)))), 0, 0);
+    strip1.updateLedColor(ballPosition - i * ballVelocity, (int)(255 * (1.0 / (1 + (i * i)))), 0, 0);
   }
   FastLED.show();
   delay(TIME_DELAY);
@@ -114,13 +113,14 @@ void resetBallPosition()
 
 void clearLeds(int start,int end) {
   for(int i = start; i < end ; i++){
-    updateLedColor(i,0,0,0);
+    strip1.updateLedColor(i,0,0,0);
   }
 }
 
 void setup()
 {
-  FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
+  FastLED.addLeds<NEOPIXEL, STRIP_1_PIN>(leds1, 270);
+  FastLED.addLeds<NEOPIXEL, STRIP_2_PIN>(leds2, 30);
   ps3Setup();
 }
 
@@ -144,6 +144,3 @@ void loop()
   drawBats(1, 1, 1);
 }
 
-bool inBounds(int position) {
-  return position >= START_INDEX && position < END_INDEX;
-}
