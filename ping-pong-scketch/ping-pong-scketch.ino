@@ -18,7 +18,6 @@ void loop()
 {
   pongGameLoop();
 
-  drawBats(1, 1, 1);
   delay(TIME_DELAY);
   FastLED.show();
 }
