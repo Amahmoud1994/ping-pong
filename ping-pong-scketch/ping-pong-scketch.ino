@@ -94,7 +94,9 @@ void updateBall()
 
   ballPosition += ballVelocity;
 
-  for (int i = 0; i < tailLength ; i++)
+  updateLedColor(ballPosition,255,255,255);
+  
+  for (int i = 1; i < tailLength ; i++)
   {
     updateLedColor(ballPosition - i * ballVelocity, (int)(255 * (1.0 / (1 + (i * i)))), 0, 0);
   }
