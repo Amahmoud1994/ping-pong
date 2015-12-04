@@ -26,12 +26,6 @@ int batMaxLength = 10;
 // Define the array of leds
 CRGB leds[NUM_LEDS];
 
-void setup()
-{
-  FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
-  ps3Setup();
-}
-
 void updateBats() {
 
     if (player1Bat + player1BatVelocity > batMaxLength){
@@ -81,10 +75,10 @@ void updateBall()
   {
     updateLedColor(ballPosition - i * ballVelocity, 0, 0, 0);
   }
-  if((player1Bat != 0 && ballPosition + ballVelocity < START_INDEX + player1Bat) || 
+  if((player1Bat != 0 && ballPosition + ballVelocity < START_INDEX + player1Bat) ||
       (player2Bat != 0 && ballPosition + ballVelocity > END_INDEX - player2Bat)) {
     ballVelocity *= -1;
-  }   
+  }
   else if (ballPosition + ballVelocity < START_INDEX){
     player2Score ++;
     resetBallPosition();
@@ -107,6 +101,7 @@ void updateBall()
 
 void resetBallPosition()
 {
+  clearLeds(START_INDEX,END_INDEX);
   delay(1000);
   Serial.print("\n player 1 score : ");
   Serial.print(player1Score);
@@ -114,6 +109,18 @@ void resetBallPosition()
   Serial.print(player2Score);
   ballPosition = int(NUM_LEDS / 2);
   ballVelocity = 2;
+}
+
+void clearLeds(int start,int end) {
+  for(int i = start; i < end ; i++){
+    updateLedColor(i,0,0,0);
+  }
+}
+
+void setup()
+{
+  FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
+  ps3Setup();
 }
 
 void loop()
@@ -134,8 +141,4 @@ void loop()
   updateBats();
 
   drawBats(1, 1, 1);
-}
-
-bool inBounds(int position) {
-  return position >= START_INDEX && position < END_INDEX;
 }
