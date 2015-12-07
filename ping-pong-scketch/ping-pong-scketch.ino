@@ -14,7 +14,7 @@ void setup()
   FastLED.addLeds<NEOPIXEL, STRIP_1_PIN>(strip1.leds, 270);
   FastLED.addLeds<NEOPIXEL, STRIP_2_PIN>(strip2.leds, 30);
   psSetup();
-  pongGameSetup();
+  balancingGameSetup();
 }
 
 void loop()

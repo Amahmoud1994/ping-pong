@@ -16,7 +16,7 @@ class Target
     int _alive;
 };
 Target::Target() {
-    spawn(); 
+    spawn();
 }
 void Target::spawn(){
   this->range = (int)(3+random(3));
@@ -37,19 +37,19 @@ void Target::kill(){
     for (int i = 0; i < range ; i++)
     {
      strip1.updateLedColor(position + i,0,0,0);
-     strip1.updateLedColor(position + i,0,0,0);
+     strip1.updateLedColor(position - i,0,0,0);
     }
 
 }
 void Target::draw(){
-  if(alive())  
+  if(alive())
   {
     for (int i = 0; i < range ; i++)
     {
       strip1.updateLedHSV(position + i, hue, 255, intensity);
       strip1.updateLedHSV(position - i, hue, 255, intensity);
 
-      intensity -=.15;
+      intensity -= 0.15;
       if(intensity < 0)
       {
         kill();
