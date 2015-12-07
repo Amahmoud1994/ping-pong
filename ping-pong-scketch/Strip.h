@@ -3,6 +3,7 @@ class Strip
   public:
     Strip(int startIndex, int endIndex, CRGB* leds);
     void updateLedColor(int pos, int r, int g, int b);
+    void updateLedHSV(int pos, int h, int s, int v);
     void clearLeds(int start,int end);
     bool inBounds(int pos);
     CRGB* leds;
@@ -17,9 +18,12 @@ Strip::Strip(int startIndex, int endIndex , CRGB* leds) {
 }
 void Strip::updateLedColor(int pos, int r, int g, int b) {
   if (inBounds(pos)) {
-    leds[pos].r = r;
-    leds[pos].g = g;
-    leds[pos].b = b;
+    leds[pos].setRGB(r,g,b);
+  }
+}
+void Strip::updateLedHSV(int pos, int h, int s, int v) {
+  if (inBounds(pos)) {
+    leds[pos].setHSV(h,s,v);
   }
 }
 

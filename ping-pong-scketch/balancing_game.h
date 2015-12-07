@@ -5,7 +5,8 @@ int tailLength = 3;
 
 int targetPosition = 0;
 int targetRange = 10;
-
+float targetIntensity = 200;
+int targetHue = 127;
 
 void updateBall()
 {
@@ -28,12 +29,27 @@ void updateBall()
     strip1.updateLedColor(ballPosition - i * ballVelocity, (int)(255 * (1.0 / (1 + (i * i)))), 0, 0);
   }
 }
+void addNewTarget()
+{
+  strip1.clearLeds(strip1.startIndex, strip1.endIndex);
+  targetPosition = targetRange + (int)(random(strip1.endIndex - 2*(targetRange)));
+  targetRange = (int)(3+random(3));
+  targetHue = random(255);
+  targetIntensity = 200;
+}
 void drawTarget()
 {
   for (int i = 0; i < targetRange ; i++)
   {
-    strip1.updateLedColor(targetPosition + i, 127, 127, 0);
-    strip1.updateLedColor(targetPosition - i, 127, 127, 0);
+    strip1.updateLedHSV(targetPosition + i, targetHue, 255, targetIntensity);
+    strip1.updateLedHSV(targetPosition - i, targetHue, 255, targetIntensity);
+
+    targetIntensity -=.15;
+    if(targetIntensity < 0)
+    {
+      addNewTarget();
+      
+    }
   }
 }
 void balancingGameSetup()
@@ -50,8 +66,6 @@ void balancingGameLoop()
   Usb.Task();
   drawTarget();
   if (PS4.getButtonClick(DOWN) && abs(ballPosition- targetPosition) <targetRange) {
-    strip1.clearLeds(strip1.startIndex, strip1.endIndex);
-    targetPosition = targetRange + (int)(random(strip1.endIndex - 2*(targetRange)));
-    targetRange = (int)(5+random(5));
+    addNewTarget();
   }
 }
