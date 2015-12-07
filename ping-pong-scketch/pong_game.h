@@ -32,7 +32,7 @@ void updateBats() {
     } else if (player2Bat + player2BatVelocity < coolDown) {
       player2BatVelocity = 0;
       player2Bat = 0;
-      
+
     }
 
     player2Bat += player2BatVelocity;
@@ -55,7 +55,6 @@ void drawBats(int r, int g , int b) {
 
 void resetBallPosition()
 {
-
   ballPosition = int(strip1.endIndex / 2);
   ballVelocity = 2;
   ballVelocity *= (random(2) == 1 ? -1:1);
@@ -65,11 +64,12 @@ void resetBallPosition()
 
   player2Bat = 0;
   player2BatVelocity = 0;
-  
+
   strip1.clearLeds(strip1.startIndex,strip1.endIndex);
-  
+
   FastLED.show();
   delay(1000);
+  Serial.print("s");
 }
 
 void updateBall()
@@ -81,19 +81,23 @@ void updateBall()
     strip1.updateLedColor(ballPosition - i * ballVelocity, 0, 0, 0);
   }
   if((player1Bat != 0 && ballPosition + ballVelocity < strip1.startIndex + player1Bat)) {
+    Serial.print("h");
     strip1.clearLeds(strip1.startIndex,player1Bat);
     ballVelocity *= -1;
   }else if(player2Bat != 0 && ballPosition + ballVelocity > strip1.endIndex - player2Bat){
+    Serial.print("h");
     strip1.clearLeds(player2Bat,strip1.endIndex);
     ballVelocity *= -1;
   }
   else if (ballPosition + ballVelocity < strip1.startIndex){
+    Serial.print("g");
     player2Score ++;
     strip2.updateLedColor(gameRound,0,0,255);
     gameRound++;
     resetBallPosition();
   }
   else if (ballPosition + ballVelocity > strip1.endIndex){
+    Serial.print("g");
     player1Score ++;
     strip2.updateLedColor(gameRound,0,255,0);
     gameRound++;
@@ -113,7 +117,6 @@ void updateBall()
 
 void resetPongGame() {
   strip2.clearLeds(strip2.startIndex,strip2.endIndex);
-
   ballPosition = int(strip1.endIndex / 2);
   ballVelocity = 2;
   tailLength = 9;
@@ -130,7 +133,7 @@ void resetPongGame() {
 void updateRoundStatus(){
   if(gameRound == 29) {
     strip2.clearLeds(strip2.startIndex,strip2.endIndex);
-    
+
     if(player1Score > player2Score) {
       for(int i = 0; i < strip2.endIndex; i++){
         strip2.updateLedColor(i,0,255,0);
@@ -153,24 +156,26 @@ void updateRoundStatus(){
 
 void pongGameSetup()
 {
-  
+  Serial.begin(115200);
 }
 
 void pongGameLoop()
 {
 
-  updateRoundStatus();    
-  
+  updateRoundStatus();
+
   updateBall();
   drawBats(0, 0, 0);
 
   Usb.Task();
 
   if (PS4.getButtonClick(LEFT) && player1BatVelocity == 0 ) {
+      Serial.print("b");
       player1BatVelocity = 1;
   }
 
   if (PS4.getButtonClick(CIRCLE) && player2BatVelocity == 0) {
+      Serial.print("b");
       player2BatVelocity = 1;
   }
 
