@@ -1,4 +1,4 @@
-#include <PS3USB.h>
+#include <PS4USB.h>
 
 // Satisfy the IDE, which needs to see the include statment in the ino too.
 #ifdef dobogusinclude
@@ -7,12 +7,12 @@
 #endif
 
 USB Usb;
-PS3USB PS3(&Usb); // This will just create the instance
+PS4USB PS4(&Usb); // This will just create the instance
 
 bool printAngle;
 uint8_t state = 0;
 
-void ps3Setup() {
+void psSetup() {
   Serial.begin(115200);
 #if !defined(__MIPSEL__)
   while (!Serial); // Wait for serial port to connect - used on Leonardo, Teensy and other boards with built-in USB CDC serial connection
@@ -25,23 +25,16 @@ void ps3Setup() {
 }
 void checkButtons() {
   Usb.Task();
-    if (PS3.getButtonClick(UP)) {
+    if (PS4.getButtonClick(UP)) {
       Serial.print(F("\r\nUp"));
-      
     }
-    if (PS3.getButtonClick(RIGHT)) {
+    if (PS4.getButtonClick(RIGHT)) {
       Serial.print(F("\r\nRight"));
-      PS3.setLedOff();
-      PS3.setLedOn(LED1);
     }
-    if (PS3.getButtonClick(DOWN)) {
+    if (PS4.getButtonClick(DOWN)) {
       Serial.print(F("\r\nDown"));
-      PS3.setLedOff();
-      PS3.setLedOn(LED2);
     }
-    if (PS3.getButtonClick(LEFT)) {
+    if (PS4.getButtonClick(LEFT)) {
       Serial.print(F("\r\nLeft"));
-      PS3.setLedOff();
-      PS3.setLedOn(LED3);
     }
 }

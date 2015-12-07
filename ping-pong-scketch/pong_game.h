@@ -114,11 +114,11 @@ void pongGameLoop()
 
   Usb.Task();
 
-  if (PS3.getButtonClick(LEFT) && player1BatVelocity == 0 ) {
+  if (PS4.getButtonClick(LEFT) && player1BatVelocity == 0 ) {
       player1BatVelocity = 1;
   }
 
-  if (PS3.getButtonClick(RIGHT) && player2BatVelocity == 0) {
+  if (PS4.getButtonClick(RIGHT) && player2BatVelocity == 0) {
       player2BatVelocity = 1;
   }
 

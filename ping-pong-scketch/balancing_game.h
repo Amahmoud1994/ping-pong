@@ -50,7 +50,7 @@ void balancingGameLoop()
 
   Usb.Task();
   drawTarget();
-  if (PS3.getButtonClick(DOWN) && abs(ballPosition- targetPosition) <targetRange) {
+  if (PS4.getButtonClick(DOWN) && abs(ballPosition- targetPosition) <targetRange) {
     strip1.clearLeds(strip1.startIndex, strip1.endIndex);
     targetPosition = targetRange + (int)(random(strip1.endIndex - 2*(targetRange)));
     targetRange = (int)(5+random(5));

@@ -1,5 +1,5 @@
 #include "FastLED.h"
-#include "ps3usb-read.h"
+#include "psUsb-read.h"
 #include "Strip.h"
 //#include "pong_game.h"
 #include "balancing_game.h"
@@ -12,7 +12,7 @@ void setup()
 {
   FastLED.addLeds<NEOPIXEL, STRIP_1_PIN>(strip1.leds, 270);
   FastLED.addLeds<NEOPIXEL, STRIP_2_PIN>(strip2.leds, 30);
-  ps3Setup();
+  psSetup();
 }
 
 void loop()
