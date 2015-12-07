@@ -1,5 +1,3 @@
-#define TIME_DELAY 10
-
 void resetPongGame();
 
 int ballPosition = int(strip1.endIndex / 2);
@@ -14,23 +12,27 @@ int player2Bat = 0;
 int player2BatVelocity = 0;
 int player2Score = 0;
 
-int batMaxLength = 10;
+int batMaxLength = 6;
 int gameRound = 0;
 
 void updateBats() {
 
+    int coolDown = -30;
     if (player1Bat + player1BatVelocity > batMaxLength){
       player1BatVelocity *= -1;
-    } else if (player1Bat + player1BatVelocity < 0){
+    } else if (player1Bat + player1BatVelocity < coolDown){
       player1BatVelocity = 0;
+      player1Bat = 0;
     }
 
     player1Bat += player1BatVelocity;
 
     if (player2Bat + player2BatVelocity > batMaxLength) {
       player2BatVelocity = -1;
-    } else if (player2Bat + player2BatVelocity < 0) {
+    } else if (player2Bat + player2BatVelocity < coolDown) {
       player2BatVelocity = 0;
+      player2Bat = 0;
+      
     }
 
     player2Bat += player2BatVelocity;
@@ -57,8 +59,15 @@ void resetBallPosition()
   ballPosition = int(strip1.endIndex / 2);
   ballVelocity = 2;
   ballVelocity *= (random(2) == 1 ? -1:1);
-  strip1.clearLeds(strip1.startIndex,strip1.endIndex);
 
+  player1Bat = 0;
+  player1BatVelocity = 0;
+
+  player2Bat = 0;
+  player2BatVelocity = 0;
+  
+  strip1.clearLeds(strip1.startIndex,strip1.endIndex);
+  
   FastLED.show();
   delay(1000);
 }
@@ -161,7 +170,7 @@ void pongGameLoop()
       player1BatVelocity = 1;
   }
 
-  if (PS4.getButtonClick(RIGHT) && player2BatVelocity == 0) {
+  if (PS4.getButtonClick(CIRCLE) && player2BatVelocity == 0) {
       player2BatVelocity = 1;
   }
 

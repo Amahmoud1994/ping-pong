@@ -1,4 +1,3 @@
-#define TIME_DELAY 10
 
 int ballPosition = int(strip1.endIndex / 2);
 int ballVelocity = 2;

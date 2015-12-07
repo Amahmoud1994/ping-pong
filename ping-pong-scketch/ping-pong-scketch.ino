@@ -6,7 +6,7 @@
 
 #define STRIP_1_PIN 3
 #define STRIP_2_PIN 4
-#define TIME_DELAY 10
+#define TIME_DELAY 1
 
 void setup()
 {

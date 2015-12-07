@@ -1,4 +1,5 @@
-#include <PS4BT.h>
+#include <PS4USB.h>
+#include <usbhub.h>
 
 // Satisfy the IDE, which needs to see the include statment in the ino too.
 #ifdef dobogusinclude
@@ -7,10 +8,7 @@
 #endif
 
 USB Usb;
-//USBHub Hub1(&Usb); // Some dongles have a hub inside
-BTD Btd(&Usb); // You have to create the Bluetooth Dongle instance like so
-
-PS4BT PS4(&Btd, PAIR);
+PS4USB PS4(&Usb);
 
 bool printAngle;
 uint8_t state = 0;
@@ -24,7 +22,7 @@ void psSetup() {
     Serial.print(F("\r\nOSC did not start"));
     while (1); //halt
   }
-  Serial.print(F("\r\nPS3 USB Library Started"));
+  Serial.print(F("\r\nPS4 USB Library Started"));
 }
 void checkButtons() {
   Usb.Task();
