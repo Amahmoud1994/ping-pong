@@ -1,4 +1,4 @@
-#include <PS4USB.h>
+#include <PS4BT.h>
 
 // Satisfy the IDE, which needs to see the include statment in the ino too.
 #ifdef dobogusinclude
@@ -7,7 +7,10 @@
 #endif
 
 USB Usb;
-PS4USB PS4(&Usb); // This will just create the instance
+//USBHub Hub1(&Usb); // Some dongles have a hub inside
+BTD Btd(&Usb); // You have to create the Bluetooth Dongle instance like so
+
+PS4BT PS4(&Btd, PAIR);
 
 bool printAngle;
 uint8_t state = 0;
