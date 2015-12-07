@@ -1,6 +1,7 @@
 #include "FastLED.h"
 #include "psUsb-read.h"
 #include "Strip.h"
+#include "Target.h"
 #include "balancing_game.h"
 
 

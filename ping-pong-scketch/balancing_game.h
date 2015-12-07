@@ -3,10 +3,7 @@ int ballPosition = int(strip1.endIndex / 2);
 int ballVelocity = 2;
 int tailLength = 3;
 
-int targetPosition = 0;
-int targetRange = 10;
-float targetIntensity = 200;
-int targetHue = 127;
+Target target1;
 
 void updateBall()
 {
@@ -32,25 +29,11 @@ void updateBall()
 void addNewTarget()
 {
   strip1.clearLeds(strip1.startIndex, strip1.endIndex);
-  targetPosition = targetRange + (int)(random(strip1.endIndex - 2*(targetRange)));
-  targetRange = (int)(3+random(3));
-  targetHue = random(255);
-  targetIntensity = 200;
+  target1.spawn();
 }
 void drawTarget()
 {
-  for (int i = 0; i < targetRange ; i++)
-  {
-    strip1.updateLedHSV(targetPosition + i, targetHue, 255, targetIntensity);
-    strip1.updateLedHSV(targetPosition - i, targetHue, 255, targetIntensity);
-
-    targetIntensity -=.15;
-    if(targetIntensity < 0)
-    {
-      addNewTarget();
-      
-    }
-  }
+  target1.draw();
 }
 void balancingGameSetup()
 {
@@ -65,7 +48,7 @@ void balancingGameLoop()
 
   Usb.Task();
   drawTarget();
-  if (PS4.getButtonClick(DOWN) && abs(ballPosition- targetPosition) <targetRange) {
-    addNewTarget();
+  if (PS4.getButtonClick(DOWN) && target1.contains(ballPosition)) {
+    target1.kill();
   }
 }
