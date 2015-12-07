@@ -34,6 +34,12 @@ bool Target::alive(){
 
 void Target::kill(){
     _alive = 0;
+    for (int i = 0; i < range ; i++)
+    {
+     strip1.updateLedColor(position + i,0,0,0);
+     strip1.updateLedColor(position + i,0,0,0);
+    }
+
 }
 void Target::draw(){
   if(alive())  
