@@ -140,6 +140,7 @@ void updateRoundStatus(){
     strip2.clearLeds(strip2.startIndex,strip2.endIndex);
 
     if(player1Score > player2Score) {
+      Serial.print("w");
       for(int i = 0; i < strip2.endIndex; i++){
         strip2.updateLedColor(i,0,255,0);
         delay(100);
@@ -147,6 +148,7 @@ void updateRoundStatus(){
       }
     }
     else {
+      Serial.print("w");
       for(int i = 0; i < strip2.endIndex; i++){
         strip2.updateLedColor(i,0,0,255);
         delay(100);
@@ -154,7 +156,8 @@ void updateRoundStatus(){
       }
     }
 
-    delay(5000); // wait for 5 seconds and reset
+
+    delay(7000); // wait for 7 seconds and reset
     pongGameSetup();
   }
 }

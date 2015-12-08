@@ -104,7 +104,7 @@ void updateScoreDisplay(){
       }
 
     } else {
-
+      Serial.print("w");
       for(int i = 0; i < strip2.endIndex; i++){
         strip2.updateLedColor(i,0,195,0);
         delay(100);
@@ -113,7 +113,7 @@ void updateScoreDisplay(){
 
     }
 
-    delay(5000); // wait for 5 seconds and reset
+    delay(7000); // wait for 7 seconds and reset
     balancingGameSetup();
     return;
   }
@@ -130,11 +130,12 @@ void updateScoreDisplay(){
 
 void balancingGameSetup()
 {
-
-  resetBalancingGame();
+  Serial.begin(115200);
 
   for (int i = 0; i < TARGETS_COUNT; i ++)
     targets[i].kill();
+
+  resetBalancingGame();
 }
 
 
