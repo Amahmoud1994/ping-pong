@@ -2,7 +2,7 @@ import serial
 import pyglet
 from time import sleep
 
-ser = serial.Serial('/dev/ttyACM1', 115200, timeout=None)
+ser = serial.Serial('/dev/ttyACM0', 115200, timeout=None)
 
 pyglet.options['audio'] = ('openal', 'silent')
 player = pyglet.media

@@ -2,12 +2,13 @@
 #include "psUsb-read.h"
 #include "Strip.h"
 #include "Target.h"
+
 #include "balancing_game.h"
 
 
 #define STRIP_1_PIN 3
 #define STRIP_2_PIN 4
-#define TIME_DELAY 25
+
 
 void setup()
 {
@@ -22,6 +23,5 @@ void loop()
 
   balancingGameLoop();
 
-  delay(TIME_DELAY);
   FastLED.show();
 }

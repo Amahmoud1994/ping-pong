@@ -1,5 +1,7 @@
 void resetPongGame();
 
+const int TIME_DELAY = 1;
+
 int ballPosition = int(strip1.endIndex / 2);
 int ballVelocity = 2;
 int tailLength = 9;
@@ -182,5 +184,7 @@ void pongGameLoop()
   updateBats();
 
   drawBats(1, 1, 1);
+
+  delay(TIME_DELAY);
 
 }

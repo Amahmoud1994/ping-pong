@@ -1,3 +1,4 @@
+const int TIME_DELAY = 25;
 
 int ballPosition = int(strip1.endIndex / 2);
 int ballVelocity = 2;
@@ -89,4 +90,8 @@ void balancingGameLoop()
           targets[i].kill();
         }
   }
+
+
+  delay(TIME_DELAY);
+
 }
