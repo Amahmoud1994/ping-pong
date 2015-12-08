@@ -5,6 +5,7 @@ int ballVelocity = 2;
 int tailLength = 3;
 
 int score = 0;
+int scoreMiddleIndex = strip2.endIndex / 2;
 
 #define TARGETS_COUNT  3
 Target targets[TARGETS_COUNT];
@@ -98,6 +99,16 @@ void balancingGameLoop()
           targets[i].kill();
           score++;
         }
+  }
+
+  strip2.clearLeds(strip2.startIndex,strip2.endIndex);
+
+  for (int i = 0; i < abs(score); i++) {
+    if(score > 0) {
+      strip2.updateLedColor(scoreMiddleIndex+i,0,255,0);
+    }else{
+      strip2.updateLedColor(scoreMiddleIndex-i,255,0,0);
+    }
   }
 
   Serial.println(score);
