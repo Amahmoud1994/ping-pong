@@ -23,10 +23,12 @@ void updateBallBalancingGame()
   }
 
   if (ballPositionBalancingGame + ballVelocityBalancingGame < strip1.startIndex) {
+    Serial.print('h');
     ballVelocityBalancingGame *= -1;
   }
 
   if (ballPositionBalancingGame + ballVelocityBalancingGame > strip1.endIndex) {
+    Serial.print('h');
     ballVelocityBalancingGame *= -1;
   }
 
@@ -97,6 +99,7 @@ void updateScoreDisplay(){
     strip2.clearLeds(strip2.startIndex,strip2.endIndex);
 
     if(score < 0) { // game lost
+      Serial.print("l");
       for(int i = 0; i < strip2.endIndex; i++){
         strip2.updateLedColor(i,195,0,0);
         delay(100);
@@ -156,12 +159,22 @@ void balancingGameLoop()
     currentTime+=5;
 
   if (PS4.getButtonClick(CROSS)) {
-    for (int i = 0; i < TARGETS_COUNT; i ++)
+    bool allMiss = true;
+
+    for (int i = 0; i < TARGETS_COUNT; i ++){
       if(targets[i].alive() && targets[i].contains(ballPositionBalancingGame))
-        {
-          targets[i].kill();
-          score++;
-        }
+      {
+        Serial.print("c");
+        targets[i].kill();
+        score++;
+        allMiss = false;
+      }
+    }
+
+    if(allMiss) {
+      Serial.print("m");
+    }
+
   }
 
   strip2.clearLeds(strip2.startIndex,strip2.endIndex);
