@@ -3,6 +3,7 @@
 #include "Strip.h"
 #include "Target.h"
 
+#include "pong_game.h"
 #include "balancing_game.h"
 
 

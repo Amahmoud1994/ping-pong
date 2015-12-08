@@ -1,8 +1,10 @@
-const int TIME_DELAY = 10;
+void balancingGameSetup();
 
-int ballPosition = int(strip1.endIndex / 2);
-int ballVelocity = 2;
-int tailLength = 3;
+const int TIME_DELAY_BALANCING_GAME = 10;
+
+int ballPositionBalancingGame = int(strip1.endIndex / 2);
+int ballVelocityBalancingGame = 2;
+int tailLengthBalancingGame = 3;
 
 int score = 0;
 int scoreMiddleIndex = strip2.endIndex / 2;
@@ -13,28 +15,28 @@ Target targets[TARGETS_COUNT];
 int currentTime = 0;
 int maxTime = 300;
 
-void updateBall()
+void updateBallBalancingGame()
 {
-  for (int i = 0; i < tailLength ; i++)
+  for (int i = 0; i < tailLengthBalancingGame ; i++)
   {
-    strip1.updateLedColor(ballPosition - i * ballVelocity, 0, 0, 0);
+    strip1.updateLedColor(ballPositionBalancingGame - i * ballVelocityBalancingGame, 0, 0, 0);
   }
 
-  if (ballPosition + ballVelocity < strip1.startIndex) {
-    ballVelocity *= -1;
+  if (ballPositionBalancingGame + ballVelocityBalancingGame < strip1.startIndex) {
+    ballVelocityBalancingGame *= -1;
   }
 
-  if (ballPosition + ballVelocity > strip1.endIndex) {
-    ballVelocity *= -1;
+  if (ballPositionBalancingGame + ballVelocityBalancingGame > strip1.endIndex) {
+    ballVelocityBalancingGame *= -1;
   }
 
-  ballPosition += ballVelocity;
+  ballPositionBalancingGame += ballVelocityBalancingGame;
 
-  strip1.updateLedColor(ballPosition, 255, 255, 255);
+  strip1.updateLedColor(ballPositionBalancingGame, 255, 255, 255);
 
-  for (int i = 1; i < tailLength ; i++)
+  for (int i = 1; i < tailLengthBalancingGame ; i++)
   {
-    strip1.updateLedColor(ballPosition - i * ballVelocity, (int)(255 * (1.0 / (1 + (i * i)))), 0, 0);
+    strip1.updateLedColor(ballPositionBalancingGame - i * ballVelocityBalancingGame, (int)(255 * (1.0 / (1 + (i * i)))), 0, 0);
   }
 }
 
@@ -74,9 +76,9 @@ void resetBalancingGame() {
   strip1.clearLeds(strip1.startIndex,strip1.endIndex);
   strip2.clearLeds(strip2.startIndex,strip2.endIndex);
 
-  ballPosition = int(strip1.endIndex / 2);
-  ballVelocity = 2;
-  tailLength = 3;
+  ballPositionBalancingGame = int(strip1.endIndex / 2);
+  ballVelocityBalancingGame = 2;
+  tailLengthBalancingGame = 3;
   score = 0;
   scoreMiddleIndex = strip2.endIndex / 2;
   currentTime = 0;
@@ -112,7 +114,7 @@ void updateScoreDisplay(){
     }
 
     delay(5000); // wait for 5 seconds and reset
-    resetBalancingGame();
+    balancingGameSetup();
     return;
   }
 
@@ -128,6 +130,9 @@ void updateScoreDisplay(){
 
 void balancingGameSetup()
 {
+
+  resetBalancingGame();
+
   for (int i = 0; i < TARGETS_COUNT; i ++)
     targets[i].kill();
 }
@@ -139,7 +144,7 @@ void balancingGameLoop()
   Usb.Task();
   drawTarget();
 
-  updateBall();
+  updateBallBalancingGame();
 
   if(currentTime == maxTime)
   {
@@ -151,7 +156,7 @@ void balancingGameLoop()
 
   if (PS4.getButtonClick(CROSS)) {
     for (int i = 0; i < TARGETS_COUNT; i ++)
-      if(targets[i].alive() && targets[i].contains(ballPosition))
+      if(targets[i].alive() && targets[i].contains(ballPositionBalancingGame))
         {
           targets[i].kill();
           score++;
@@ -164,6 +169,6 @@ void balancingGameLoop()
 
   Serial.println(score);
 
-  delay(TIME_DELAY);
+  delay(TIME_DELAY_BALANCING_GAME);
 
 }
