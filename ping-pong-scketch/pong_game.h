@@ -1,4 +1,5 @@
 void resetPongGame();
+void pongGameSetup();
 
 const int TIME_DELAY = 1;
 
@@ -118,7 +119,9 @@ void updateBall()
 }
 
 void resetPongGame() {
+  strip1.clearLeds(strip1.startIndex,strip1.endIndex);
   strip2.clearLeds(strip2.startIndex,strip2.endIndex);
+
   ballPosition = int(strip1.endIndex / 2);
   ballVelocity = 2;
   tailLength = 9;
@@ -152,13 +155,14 @@ void updateRoundStatus(){
     }
 
     delay(5000); // wait for 5 seconds and reset
-    resetPongGame();
+    pongGameSetup();
   }
 }
 
 void pongGameSetup()
 {
   Serial.begin(115200);
+  resetPongGame();
 }
 
 void pongGameLoop()
