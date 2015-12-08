@@ -50,10 +50,7 @@ void Target::draw(){
       strip1.updateLedHSV(position - i, hue, 255, intensity);
 
       intensity -= 0.15;
-      if(intensity < 0)
-      {
-        kill();
-      }
+
     }
   }
 }

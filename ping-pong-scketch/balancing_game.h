@@ -4,6 +4,7 @@ int ballPosition = int(strip1.endIndex / 2);
 int ballVelocity = 2;
 int tailLength = 3;
 
+int score = 0;
 
 #define TARGETS_COUNT  3
 Target targets[TARGETS_COUNT];
@@ -57,8 +58,15 @@ void addNewTarget()
 
 void drawTarget()
 {
-  for (int i = 0; i < TARGETS_COUNT; i ++)
+  for (int i = 0; i < TARGETS_COUNT; i ++){
     targets[i].draw();
+
+    if(targets[i].intensity < 0 && targets[i].alive())
+    {
+      targets[i].kill();
+      score--;
+    }
+  }
 }
 
 void balancingGameSetup()
@@ -69,10 +77,11 @@ void balancingGameSetup()
 
 void balancingGameLoop()
 {
-  updateBall();
 
   Usb.Task();
   drawTarget();
+
+  updateBall();
 
   if(currentTime == maxTime)
   {
@@ -86,11 +95,12 @@ void balancingGameLoop()
     for (int i = 0; i < TARGETS_COUNT; i ++)
       if(targets[i].alive() && targets[i].contains(ballPosition))
         {
-          Serial.print(i);
           targets[i].kill();
+          score++;
         }
   }
 
+  Serial.println(score);
 
   delay(TIME_DELAY);
 
