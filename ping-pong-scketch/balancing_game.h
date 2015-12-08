@@ -1,4 +1,4 @@
-const int TIME_DELAY = 25;
+const int TIME_DELAY = 10;
 
 int ballPosition = int(strip1.endIndex / 2);
 int ballVelocity = 2;
@@ -70,11 +70,68 @@ void drawTarget()
   }
 }
 
+void resetBalancingGame() {
+  strip1.clearLeds(strip1.startIndex,strip1.endIndex);
+  strip2.clearLeds(strip2.startIndex,strip2.endIndex);
+
+  ballPosition = int(strip1.endIndex / 2);
+  ballVelocity = 2;
+  tailLength = 3;
+  score = 0;
+  scoreMiddleIndex = strip2.endIndex / 2;
+  currentTime = 0;
+  maxTime = 300;
+
+  for (int i = 0; i < TARGETS_COUNT; i++){
+    targets[i].kill();
+  }
+}
+
+
+void updateScoreDisplay(){
+
+  if(abs(score) >= scoreMiddleIndex) { // game over :(
+
+    strip2.clearLeds(strip2.startIndex,strip2.endIndex);
+
+    if(score < 0) { // game lost
+      for(int i = 0; i < strip2.endIndex; i++){
+        strip2.updateLedColor(i,195,0,0);
+        delay(100);
+        FastLED.show();
+      }
+
+    } else {
+
+      for(int i = 0; i < strip2.endIndex; i++){
+        strip2.updateLedColor(i,0,195,0);
+        delay(100);
+        FastLED.show();
+      }
+
+    }
+
+    delay(5000); // wait for 5 seconds and reset
+    resetBalancingGame();
+    return;
+  }
+
+  for (int i = 0; i < abs(score); i++) {
+    if(score > 0) {
+      strip2.updateLedColor(scoreMiddleIndex+i,0,195,0);
+    }else{
+      strip2.updateLedColor(scoreMiddleIndex-i,195,0,0);
+    }
+  }
+
+}
+
 void balancingGameSetup()
 {
   for (int i = 0; i < TARGETS_COUNT; i ++)
     targets[i].kill();
 }
+
 
 void balancingGameLoop()
 {
@@ -103,13 +160,7 @@ void balancingGameLoop()
 
   strip2.clearLeds(strip2.startIndex,strip2.endIndex);
 
-  for (int i = 0; i < abs(score); i++) {
-    if(score > 0) {
-      strip2.updateLedColor(scoreMiddleIndex+i,0,255,0);
-    }else{
-      strip2.updateLedColor(scoreMiddleIndex-i,255,0,0);
-    }
-  }
+  updateScoreDisplay();
 
   Serial.println(score);
 
