@@ -17,8 +17,8 @@ int mode = PING_PONG;
 
 void setup()
 {
-  FastLED.addLeds<NEOPIXEL, STRIP_1_PIN>(strip1.leds, 270);
-  FastLED.addLeds<NEOPIXEL, STRIP_2_PIN>(strip2.leds, 30);
+  FastLED.addLeds<NEOPIXEL, STRIP_1_PIN>(strip1.leds, strip1.endIndex);
+  FastLED.addLeds<NEOPIXEL, STRIP_2_PIN>(strip2.leds, strip2.endIndex);
   psSetup();
 
   pongGameSetup();

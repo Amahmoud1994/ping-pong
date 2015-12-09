@@ -1,3 +1,6 @@
+#define NUM_LEDS_STRIP_1 270
+#define NUM_LEDS_STRIP_2 30
+
 class Strip
 {
   public:
@@ -11,16 +14,19 @@ class Strip
     int endIndex;
   private:
 };
+
 Strip::Strip(int startIndex, int endIndex , CRGB* leds) {
  this->leds = leds;
  this->startIndex = startIndex;
  this->endIndex = endIndex;
 }
+
 void Strip::updateLedColor(int pos, int r, int g, int b) {
   if (inBounds(pos)) {
     leds[pos].setRGB(r,g,b);
   }
 }
+
 void Strip::updateLedHSV(int pos, int h, int s, int v) {
   if (inBounds(pos)) {
     leds[pos].setHSV(h,s,v);
@@ -37,7 +43,7 @@ void Strip::clearLeds(int start,int end) {
   }
 }
 
-CRGB leds1[270];
-CRGB leds2[30];
-Strip strip1(0,270, leds1);
-Strip strip2(0,30, leds2);
+CRGB leds1[NUM_LEDS_STRIP_1];
+CRGB leds2[NUM_LEDS_STRIP_2];
+Strip strip1(0,NUM_LEDS_STRIP_1, leds1);
+Strip strip2(0,NUM_LEDS_STRIP_2, leds2);

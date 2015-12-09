@@ -135,9 +135,6 @@ void balancingGameSetup()
 {
   Serial.begin(115200);
 
-  for (int i = 0; i < TARGETS_COUNT; i ++)
-    targets[i].kill();
-
   resetBalancingGame();
 }
 
