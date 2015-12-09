@@ -15,6 +15,7 @@ win = player.load('effects/win.wav', streaming=False)
 lose = player.load('effects/lose.wav', streaming=False)
 collect = player.load('effects/collect.wav', streaming=False)
 miss = player.load('effects/miss.wav', streaming=False)
+target_flush = player.load('effects/target_flush.wav', streaming=False)
 
 while True:
 
@@ -36,5 +37,7 @@ while True:
         collect.play()
     elif data == 'm':
         miss.play()
+    elif data == 'f':
+        target_flush.play()
 
     sleep(0.001)

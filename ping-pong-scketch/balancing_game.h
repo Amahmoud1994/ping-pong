@@ -68,6 +68,7 @@ void drawTarget()
 
     if(targets[i].intensity < 0 && targets[i].alive())
     {
+      Serial.print("f");
       targets[i].kill();
       score--;
     }
