@@ -181,8 +181,6 @@ void balancingGameLoop()
 
   updateScoreDisplay();
 
-  Serial.println(score);
-
   delay(TIME_DELAY_BALANCING_GAME);
 
 }
